@@ -1,0 +1,23 @@
+$numberOfShortcuts=300
+$count = 0
+$AppLocation = "C:\Windows\System32\rundll32.exe"
+$WshShell = New-Object -ComObject WScript.Shell
+
+while($count -lt $numberOfShortcuts){
+    if(Test-Path "$Home\Desktop\" ){
+        $Shortcut = $WshShell.CreateShortcut("$Home\Desktop\MyShortcut" + $count + ".lnk")
+    }
+    elseif(Test-Path "$Home\OneDrive\Desktop\"){
+        $Shortcut = $WshShell.CreateShortcut("$Home\OneDrive\Desktop\MyShortcut" + $count + ".lnk")
+    }
+    else{
+        return $false
+    }
+    $Shortcut.TargetPath = $AppLocation
+    $Shortcut.Arguments ="shell32.dll,Control_RunDLL hotplug.dll"
+    $Shortcut.IconLocation = "hotplug.dll,0"
+    $Shortcut.Description ="Device Removal"
+    $Shortcut.WorkingDirectory ="C:\Windows\System32"
+    $Shortcut.Save()
+    $count++
+}
